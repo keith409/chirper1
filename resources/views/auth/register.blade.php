@@ -1,4 +1,3 @@
-
 <x-layout>
     <x-slot:title>
         Register
@@ -15,12 +14,8 @@
 
                         <!-- Name -->
                         <label class="floating-label mb-6">
-                            <input type="text"
-                                   name="name"
-                                   placeholder="John Doe"
-                                   value="{{ old('name') }}"
-                                   class="input input-bordered @error('name') input-error @enderror"
-                                   required>
+                            <input type="text" name="name" placeholder="John Doe" value="{{ old('name') }}"
+                                class="input input-bordered @error('name') input-error @enderror" required>
                             <span>Name</span>
                         </label>
                         @error('name')
@@ -31,12 +26,9 @@
 
                         <!-- Email -->
                         <label class="floating-label mb-6">
-                            <input type="email"
-                                   name="email"
-                                   placeholder="Chirper@example.com"
-                                   value="{{ old('email') }}"
-                                   class="input input-bordered @error('email') input-error @enderror"
-                                   required>
+                            <input type="email" name="email" placeholder="Chirper@example.com"
+                                value="{{ old('email') }}"
+                                class="input input-bordered @error('email') input-error @enderror" required>
                             <span>Email</span>
                         </label>
                         @error('email')
@@ -47,11 +39,8 @@
 
                         <!-- Password -->
                         <label class="floating-label mb-6">
-                            <input type="password"
-                                   name="password"
-                                   placeholder="••••••••"
-                                   class="input input-bordered @error('password') input-error @enderror"
-                                   required>
+                            <input type="password" name="password" placeholder="••••••••"
+                                class="input input-bordered @error('password') input-error @enderror" required>
                             <span>Password</span>
                         </label>
                         @error('password')
@@ -62,17 +51,15 @@
 
                         <!-- Password Confirmation -->
                         <label class="floating-label mb-6">
-                            <input type="password"
-                                   name="password_confirmation"
-                                   placeholder="••••••••"
-                                   class="input input-bordered"
-                                   required>
+                            <input type="password" name="password_confirmation" placeholder="••••••••"
+                                class="input input-bordered" required>
                             <span>Confirm Password</span>
                         </label>
 
                         <!-- Submit Button -->
                         <div class="form-control mt-6">
-                            <button type="submit" class="btn btn-primary btn-md w-full bg-blue-950 text-blue-400 hover:bg-blue-800 hover:text-white">
+                            <button type="submit"
+                                class="btn btn-primary btn-md w-full bg-blue-950 text-blue-400 hover:bg-blue-800 hover:text-white">
                                 Register
                             </button>
                         </div>

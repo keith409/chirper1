@@ -2,23 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\Models\Chirp;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+
+
+
 class ChirpController extends Controller
 {
+    use AuthorizesRequests;
     /**
      * Display a listing of the resource.
      */
-   
-public function index()
 
-{  $chirps = Chirp::with('user')
+    public function index()
+
+    {
+        $chirps = Chirp::with('user')
             ->orderBy('updated_at', 'desc')
             ->take(50)  // Limit to 50 most recent chirps
             ->get();
- 
+
         return view('home', ['chirps' => $chirps]);
-}
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -34,20 +41,16 @@ public function index()
     public function store(Request $request)
     {
         $validated = $request->validate([
-        'message' => 'required|string|max:255|min:5',
-    ], [
-        'message.required' => 'Please write something to chirp!',
-        'message.max' => 'Chirps must be 255 characters or less.',
-        'message.min' => 'Chirps must be at least 5 characters.',
-    ]);
- 
-    \App\Models\Chirp::create([
-        'message' => $validated['message'],
-        'user_id' => null,
-    ]);
- 
-    return redirect('/')->with('success', 'Your chirp has been posted!');
-    
+            'message' => 'required|string|max:255|min:5',
+        ], [
+            'message.required' => 'Please write something to chirp!',
+            'message.max' => 'Chirps must be 255 characters or less.',
+            'message.min' => 'Chirps must be at least 5 characters.',
+        ]);
+
+        request()->user()->chirps()->create($validated);
+
+        return redirect('/')->with('success', 'Your chirp has been posted!');
     }
 
     /**
@@ -61,37 +64,39 @@ public function index()
     /**
      * Show the form for editing the specified resource.
      */
-    
-public function edit(Chirp $chirp)
-{
-    // We'll add authorization in lesson 11
-    return view('chirps.edit', compact('chirp'));
-}
 
-public function update(Request $request, Chirp $chirp)
-{
-
-   
-    // Validate
-    $validated = $request->validate([
-        'message' => 'required|string|max:255',
-    ]);
-
-    // Update
-    $chirp->update($validated);
-
-    return redirect('/')->with('success', 'Chirp updated!');
-     
-    if ($request->user()->cannot('update', $chirp)) {
-        abort(403);
+    public function edit(Chirp $chirp)
+    {
+        $this->authorize('update', $chirp);
+        // We'll add authorization in lesson 11
+        return view('chirps.edit', compact('chirp'));
     }
-}
 
-public function destroy(Chirp $chirp)
-{
-    $chirp->delete();
+    public function update(Request $request, Chirp $chirp)
+    {
 
-    return redirect('/')->with('success', 'Chirp deleted!');
-}
-    
+        $this->authorize('update', $chirp);
+        // Validate
+        $validated = $request->validate([
+            'message' => 'required|string|max:255',
+        ]);
+
+        // Update
+        $chirp->update($validated);
+
+        return redirect('/')->with('success', 'Chirp updated!');
+
+        if ($request->user()->cannot('update', $chirp)) {
+            abort(403);
+        }
+    }
+
+    public function destroy(Chirp $chirp)
+    {
+        $this->authorize('delete', $chirp);
+
+        $chirp->delete();
+
+        return redirect('/')->with('success', 'Chirp deleted!');
+    }
 }
