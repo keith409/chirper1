@@ -13,7 +13,7 @@ class ChirpController extends Controller
 public function index()
 
 {  $chirps = Chirp::with('user')
-            ->latest()
+            ->orderBy('updated_at', 'desc')
             ->take(50)  // Limit to 50 most recent chirps
             ->get();
  

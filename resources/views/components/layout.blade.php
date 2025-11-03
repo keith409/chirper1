@@ -11,23 +11,25 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="min-h-screen flex flex-col bg-base-200 font-sans">
-    <nav class="navbar bg-base-100">
-        <div class="navbar-start">
-            <a href="/" class="btn btn-ghost text-xl">🐦 Chirper</a>
-        </div>
-        <div class="navbar-end gap-2">
-            <a href="#" class="btn btn-ghost btn-sm">Sign In</a>
-            <a href="#" class="btn btn-primary btn-sm">Sign Up</a>
-        </div>
-    </nav>
-
+<body class="min-h-screen flex flex-col bg-blue-100 font-sans">
+   <div class="flex item-center justify-end gap-2 p-4 pl-8 bg-blue-300">
+    @auth
+        <span class="text-sm">{{ auth()->user()->name }}</span>
+        <form method="POST" action="/logout" class="inline">
+            @csrf
+            <button type="submit" class="btn btn-ghost btn-sm">Logout</button>
+        </form>
+    @else
+        <a href="/login" class="btn btn-ghost btn-sm">Sign In</a>
+        <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Sign Up</a>
+    @endauth
+</div>
     
 <!-- Success Toast -->
 @if (session('success'))
     <div class="toast toast-top toast-center">
         <div class="alert alert-success animate-fade-out">
-            <svg xmlns="<http://www.w3.org/2000/svg>" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
             <span>{{ session('success') }}</span>
@@ -39,7 +41,7 @@
         {{ $slot }}
     </main>
 
-    <footer class="footer footer-center p-5 bg-base-300 text-base-content text-xs">
+    <footer class="footer footer-center p-5 bg-blue-300 text-base-content text-xs">
         <div>
             <p>© {{ date('Y') }} Chirper - Built with Laravel and ❤️</p>
         </div>
